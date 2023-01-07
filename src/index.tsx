@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Categories, Home, Login, Profile, SignUp, SaveUser,  Users } from './pages';
+import App from "./App"
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {Categories, Home, Login, Profile, SaveCategory, SaveTask, SaveUser, SignUp, Users} from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(
@@ -10,10 +11,21 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path='/login' element={<Login />}></Route>
-      <Route path='/' element={<Home />}></Route>
-      <Route path='/saveUser' element={<SaveUser />}></Route>
-      <Route path='/profile' element={<Profile />}></Route>
+      <Route path='/' element={<App />}>
+        <Route index element={<Home />} />
+        <Route path='tasks/add' element={<SaveTask />} />
+        <Route path='login' element={<Login />} />
+        <Route path='profile' element={<Profile />} />
+        <Route path='signup' element={<SignUp />} />
+        <Route path='users/'>
+          <Route index element={<Users />} />
+          <Route path='save/:userId' element={<SaveUser />} />
+        </Route>
+        <Route path='categories/'>
+          <Route index element={<Categories />} />
+          <Route path='save/:categoryId' element={<SaveCategory />} />
+        </Route>
+      </Route>
     </Routes>
   </BrowserRouter>
 );
