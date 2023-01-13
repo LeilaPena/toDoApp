@@ -1,36 +1,74 @@
-import { categoriesServices } from "../../services"
+import { categoriesServices } from "../../services";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SaveCategory = () => {
-    const [catName, setCatName] = useState("");
+  const [name, setName] = useState("");
+  const [color, setColor] = useState("");
 
-    const { categoryId } = useParams();
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-    const fetchCategory = () => {
-        if (categoryId) {
-           categoriesServices.get(categoryId).then(data => {setCatName(data.name)})
-        }
+  const [ifError, setIfError] = useState(false);
+
+  const fetchCategory = async () => {
+    if (id) {
+      const rta = await categoriesServices.get(id);
+      setName(rta.name);
+      setColor(rta.color);
     }
-    if (catName === '') fetchCategory();
+  };
 
-    const saveCategory = (e: any) =>{
-        e.preventDefault();
-        categoriesServices.add({name: catName})
+  if (id && name === "" && color === "") fetchCategory();
+
+  const saveCategory = async (e: any) => {
+    e.preventDefault();
+
+    setIfError(false)
+
+    let rta;
+    if (id){
+        rta = await categoriesServices.update({color, name, id});
+    } else{
+        rta = await categoriesServices.add({color, name})
     }
 
-    return (    
-        <>
-            <h1>Guardar categoria</h1>
-            <form onSubmit={saveCategory}>
-                <div className="form-group">
-                    <label htmlFor="nameCategory">Nombre</label>
-                    <input type="text" id="nameCategory" value={catName} onChange={e => setCatName(e.target.value)} />
-                </div>
-                <button className="btn btn-primary">Agregar</button>
-            </form>
-        </>
-    )
-}
 
-export {SaveCategory}
+    if (rta) {
+      navigate(`/categories`);
+    } else {
+      setIfError(true);
+    }
+  };
+
+  return (
+    <>
+      <h1>Guardar categoria</h1>
+      <form onSubmit={saveCategory}>
+        <div className="form-group">
+          <label htmlFor="nameCategory">Nombre</label>
+          <input
+            type="text"
+            id="nameCategory"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="colorCategory">Color</label>
+          <input
+            type="color"
+            id="colorCategory"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+          />
+        </div>
+        <button className="btn btn-primary">Agregar</button>
+
+        {ifError && <p style={{ color: "red" }}>Hubo un error</p>}
+      </form>
+    </>
+  );
+};
+
+export { SaveCategory };

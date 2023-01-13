@@ -9,5 +9,12 @@ type Payload = Omit <User, 'id'>
 const add = (user: Payload) =>{
 
 };
+const remove = (id: string) =>{
 
-export const usersServices = {getAll, get, add}
+}
+
+const update = () =>{
+
+}
+
+export const usersServices = {getAll, get, add, remove, update}

@@ -1,18 +1,23 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { categoriesServices } from "../../services";
 import { Category } from "../../types";
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const navigate = useNavigate()
 
-  const fetchCategories = () => {
-    categoriesServices.getAll().then((data) => {
-      setCategories(data as Category[]);
-    });
+  const fetchCategories = async () => {
+    const rta = await categoriesServices.getAll()
+    setCategories(rta)
   };
+
+  const borrarCategoria = async (id: string) =>{
+    await categoriesServices.remove(id);
+    fetchCategories()
+  }
  
-  fetchCategories();
+  if (!categories.length) fetchCategories();
  
   return (
     <table border={1}>
@@ -20,15 +25,25 @@ const Categories = () => {
         <tr>
           <th>ID</th>
           <th>Nombre</th>
+          <th>Color</th>
         </tr>
       </thead>
       <tbody>
         {categories.map((cat) => {
           return (
-            <tr>
+            <tr key={cat.id}>
               <td>{cat.id}</td>
               <td> 
-                <Link to={`/categories/save/${cat.id}`}>{cat.name}</Link>
+                {cat.name}
+              </td>
+              <td> 
+                {cat.color}
+              </td>
+              <td> 
+                <button className="btn btn-danger" onClick={() => borrarCategoria(cat.id)}>Borrar</button>
+              </td>
+              <td> 
+                <button className="btn btn-info" onClick={() => navigate(`/categories/save/${cat.id}`)}>Editar</button>
               </td>
             </tr>
           );
