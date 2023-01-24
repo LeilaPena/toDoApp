@@ -1,6 +1,12 @@
+import { baseURL } from "../../constants";
+import { mapToArray } from "../../helpers/mapToArray";
 import { User } from "../../types"
 
-const getAll = () =>{};
+const getAll = async() =>{
+    const response = await fetch (`${baseURL}/users.json`)
+    const data = await response.json();
+    return mapToArray<User>(data)
+};
 
 const get = (id: string) =>{};
 

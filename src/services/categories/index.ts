@@ -3,10 +3,16 @@ import { baseURL } from "../../constants";
 import { mapToArray } from "../../helpers/mapToArray";
 import { Category } from "../../types"
 
-const getAll = async () =>{
+const getAll = async (search?: string) =>{
     const response = await fetch (`${baseURL}/categories.json`)
     const data = await response.json();
-    return mapToArray<Category>(data)
+
+    const categories = mapToArray<Category>(data)
+
+    return search
+    ? categories.filter(elem => elem.name.includes(search))
+    : categories;
+    
 };
 
 const get = async (id: string): Promise<Category> =>{

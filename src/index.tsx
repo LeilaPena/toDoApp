@@ -13,17 +13,17 @@ root.render(
     <Routes>
       <Route path='/' element={<App />}>
         <Route index element={<Home />} />
-        <Route path='tasks/add' element={<SaveTask />} />
+        <Route path='tasks/save/:id' element={<SaveTask />} />
         <Route path='login' element={<Login />} />
         <Route path='profile' element={<Profile />} />
         <Route path='signup' element={<SignUp />} />
         <Route path='users/'>
           <Route index element={<Users />} />
-          <Route path='save/:userId' element={<SaveUser />} />
+          <Route path='save/:id' element={<SaveUser />} />
         </Route>
         <Route path='categories/'>
           <Route index element={<Categories />} />
-          <Route path='save/:categoryId' element={<SaveCategory />} />
+          <Route path='save/:id' element={<SaveCategory />} />
         </Route>
       </Route>
     </Routes>

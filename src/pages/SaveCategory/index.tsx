@@ -1,6 +1,6 @@
 import { categoriesServices } from "../../services";
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams,  } from "react-router-dom";
 
 const SaveCategory = () => {
   const [name, setName] = useState("");
@@ -11,20 +11,19 @@ const SaveCategory = () => {
 
   const [ifError, setIfError] = useState(false);
 
-  const fetchCategory = async () => {
-    if (id) {
-      const rta = await categoriesServices.get(id);
-      setName(rta.name);
-      setColor(rta.color);
+  useEffect(() => {
+    if (id){
+      categoriesServices.get(id).then(data => {
+        setName(data.name)
+        setColor(data.color)
+      })
     }
-  };
-
-  if (id && name === "" && color === "") fetchCategory();
+  }, [])
 
   const saveCategory = async (e: any) => {
     e.preventDefault();
 
-    setIfError(false)
+    setIfError(false);
 
     let rta;
     if (id){

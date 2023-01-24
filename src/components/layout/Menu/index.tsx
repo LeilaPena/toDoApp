@@ -11,6 +11,11 @@ function Menu() {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link" to="tasks/save/:id">
+                Agregar tarea
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link" to="/profile">
                 Perfil
               </NavLink>
@@ -21,12 +26,22 @@ function Menu() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="users/save/:userId">
+              <NavLink className="nav-link" to="users">
+                Usuarios
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="users/save/:id">
                 Agregar usuario
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="categories/save/:categoryId">
+              <NavLink className="nav-link" to="categories">
+                Categorias
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="categories/save/:id">
                 Agregar categoria
               </NavLink>
             </li>
