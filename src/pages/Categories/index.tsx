@@ -1,37 +1,42 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { categoriesServices } from "../../services";
 import { Category } from "../../types";
+import {Spinner} from "../../components/commons"
+import { FormCategories } from "../../components";
+import { filterFields } from "./types";
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams()
   
   const navigate = useNavigate();
 
-  const fetchCategories = () => categoriesServices.getAll(search).then((data) => setCategories(data)) 
+  const fetchCategories = () => categoriesServices.getAll({text: searchParams.get('text'), color: searchParams.get('color')}).then((data) => setCategories(data)) 
 
   useEffect(() => {
     fetchCategories();
-  }, [search]);
+  }, [searchParams]);
 
   const borrarCategoria = async (id: string) => {
     await categoriesServices.remove(id);
     fetchCategories()
   };
 
+  if (!categories.length) return <Spinner />
+
+  const setSearchQuery = (params: filterFields) => {
+      setSearchParams(params)
+  }
+
   return (
     <div>
       <h1>Categorias</h1>
+
+      <FormCategories onSearch={setSearchQuery}/>
+
       <hr />
-      <form action="">
-        <input type="text"
-        name="text"
-        id="text"
-        value={search}
-        onChange = {e => setSearch(e.target.value)} />
-      </form>
-      <table border={1}>
+      <table>
         <thead>
           <tr>
             <th>ID</th>
@@ -46,6 +51,9 @@ const Categories = () => {
                 <td>{cat.id}</td>
                 <td>{cat.name}</td>
                 <td>{cat.color}</td>
+                <td style={{display: 'flex', alignItems: 'center'}}>
+                  <div style={{width: 40, height: 40, borderRadius: 20, backgroundColor: cat.color, margin: 10}}></div>
+                </td>
                 <td>
                   <button
                     className="btn btn-danger"
@@ -68,6 +76,7 @@ const Categories = () => {
         </tbody>
       </table>
     </div>
+    
   );
 };
 export { Categories };

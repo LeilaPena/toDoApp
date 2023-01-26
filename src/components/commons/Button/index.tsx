@@ -2,7 +2,7 @@ import { FC } from "react";
 
 type Props = {
     className: string
-    handleClick: () => void
+    handleClick?: () => void
     text: string
     type: "button" | "submit" | "reset" | undefined
 }
